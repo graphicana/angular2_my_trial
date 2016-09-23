@@ -1,17 +1,16 @@
 <div class="artistsearch">
     <div class="card search">
         <h1>Artist Directory</h1>
-        <label *ngIf="name" bind-innerHTML="'Name: ' + name"></label>
-        <input #newArtist
-               [(ngModel)]="name"
-               (keyup.enter)="addArtist(newArtist.value); newArtist.value=''"
-               (blur)="addArtist(newArtist.value); newArtist.value=''">
-        <button (click)="addArtist(newArtist.value); newArtist.value=''">Add</button>
+        <label>search <span *ngIf="query"> for: {{query}}</span></label>
+        <input [(ngModel)]="query" placeholder="type in search term">
     </div>
 </div>
 
-<ul class="artistlist cf">
-    <li #artistContainer (click)="onClick(item, artistContainer)" *ngFor="#item of artists">
-        <h2>{{item}}</h2>
+<ul class="artistlist cf" *ngIf="query">
+    <li (click)="showArtist(item); query=''" class="artist cf" #artistContainer
+        *ngFor="#item of (artists) | find:query">
+        <artist-item class="content" [artist]=item></artist-item>
     </li>
 </ul>
+
+<artist-details *ngIf="currentArtist" [artist]="currentArtist"></artist-details>
